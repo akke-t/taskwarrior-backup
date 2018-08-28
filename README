@@ -1,0 +1,114 @@
+Hi, these are the short usage commands. The detailed explanations are listed below
+A. Backup with (substitute your own directories in the ones I list):
+cd "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backup_dir" && tar -czf task-backup-$(date +'%Y%m%d%H%M%S').tar.gz -C "/home/a/.task" .
+B. Restore with: 
+tar -xf "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backup_dir/task-backup-20180828194105.tar.gz" -C "/home/a/.task"
+
+
+
+
+
+
+
+
+
+
+A. Detailed explanation: How to backup your taskwarrior.
+
+A.0 First note, if your folder path contains a space, put it between quotation marks "". (as done in A.3.1)
+A.0.1 in this case:
+<this_folder_path> = 
+A.0.2 C:\Users\a\Documents\fun\taskwarrior\task backup\18-08-28 Github backup method
+<this_folder_path_unix_style> = 
+cd "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method"
+
+A.1 In:
+cd $TASK_BACKUP_DIR && tar -czf task-backup-$(date +'%Y%m%d%H%M%S').tar.gz -C $TASK_DIR .
+A.1.1 Change:
+TASK_BACKUP_DIR to: 
+<this_folder_path_unix_style>/backup_dir
+A.1.2 In this case:
+"/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backupdir"
+
+A.2 After determining the location of your taskwarrior tasks*, change
+TASK_DIR to:
+/home/<your_unix_username>/.task
+A.2.1 In this case:
+/home/a/.task
+
+A.3 yielding final command:
+cd $<this_folder_path_unix_style>/backup_dir && tar -czf task-backup-$(date +'%Y%m%d%H%M%S').tar.gz -C $/home/<your_unix_username>/.task .
+A.3.1 In this case:
+cd "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backup_dir" && tar -czf task-backup-$(date +'%Y%m%d%H%M%S').tar.gz -C "/home/a/.task" .
+
+
+B. Detailed explanation: how to restore your taskwarrior backup.
+
+B.0 Unpack the backed up files (stored in E.g. task-backup-20180828194105.tar.gz) into a folder <unpacked_folder> in <some directory>.
+<some_directory><unpacked_folder><task-backup-your_backup_date.tar.gz>
+B.0.1 In this case:
+cd "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backup_dir"
+tar -xvzf task-backup-20180828194105.tar.gz
+
+B.2 Delete the original files in "/home/<your_unix_username>/.task .". (so yes that dot after task belongs there, the quotation marks should not go in Unix)
+rm -rf your_directory/*
+B.2.1 in this case:
+rm -rf /home/a/.task/*
+
+B.3 move (or copy) the files backed up back in "/home/<your_unix_username>/.task .". 
+
+B.3 Or directly unpack it to "/home/<your_unix_username>/.task ." e.g.:
+tar -xf archive.tar -C /home/<your_unix_username>/.task .
+B.3.1 In this case:
+tar -xf "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github backup method/backup_dir/task-backup-20180828194105.tar.gz" -C "/home/a/.task"
+B.3.2 Check with:
+cd /home/a/.task
+dir
+B.3.3 the files listed should now equal the files you find when you open the .tar.gz file with for example winrar on your (windows) desktop.
+B.3.4 Another way of verifying the restoration could be by just executing the task command and checking if those are the tasks of the time of the backup, if you happen to remember (the differences).
+
+
+C. Detailed explanation: where taskwarrior stores stuff.
+
+Taskwarrior stores different stuff in different locations.
+  C.0. Taskwarrior Configuration file (not a taskwarrior file named config, but named:".taskrc"^
+  C.1. The tasks
+  C.2. The certificates used for security
+  C.3. program installation files
+  C.4. Other files that I am currently unaware of.
+
+^C.0. Note: taskwarrior stores all configuration information in a file in your home directory, named .taskrc. The default .taskrc file contains a minimal set of entries, with only one required setting, which is the location of the tasks.:
+data.location=~/.task 
+
+C.1.1 As long as the <directory-path> path already exists, the default location can be overridden using the rc: attribute when running task:
+  C.1.1.a If it does not exist you can make <directory-path> with for example:
+  cd home/a
+  mkdir tasksettings
+  C.1.1.2 now run the command which re-locates the taskwarrior settings document .taskrc:
+  task rc:<directory-path>/.taskrc
+  C.1.1.3 You can now edit/view some settings of taskwarrior with (be carefull not to change anything):
+  nano .taskrc
+  exit without saving = CTRL+X 
+
+*Determining your taskwarrior task data location:
+C.1.2 The tasks are (normally, see point 0 to 1.a.3) stored in: data.location=~/.task
+C.1.3 The "~/" means "home/<unix_username>/ according to: https://linux.die.net/man/5/taskrc
+C.1.4 In this case the tasks should them be stored in:
+/home/a/.task
+*Verified.
+C.1.5 You can verify it by going to the task location and inspecting the files inside:
+cd home/<your_unix_username>/.task
+dir
+This should list (some) of the following files:
+	backlog.data
+	ca.cert.pem
+	completed.data
+	<your_taskwarrior_username>.cert.pem
+	<your_taskwarrior_username>.key.pem
+	hooks
+	pending.data
+	undo.data
+
+C.2 18-08-28 Todo: Determine location and update this in github readme
+C.3 18-08-28 Todo: Determine location and update this in github readme
+C.4 Can do if found.
