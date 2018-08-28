@@ -12,7 +12,6 @@ tar -xf "/mnt/c/Users/a/Documents/fun/taskwarrior/task backup/18-08-28 Github ba
 
 
 
-
 A. Detailed explanation: How to backup your taskwarrior.
 
 A.0 First note, if your folder path contains a space, put it between quotation marks "". (as done in A.3.1)
